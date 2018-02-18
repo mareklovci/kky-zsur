@@ -2,9 +2,9 @@
 
 """minimal_distance.py: Klasifikator podle minimalni vzdalenosti"""
 
-from k_means import k_means, plot_kmeans
-from cluster_levels import distanc
-from genpoints import generate_points
+from kky_zsur.k_means import k_means, plot_kmeans
+from kky_zsur.cluster_levels import distanc
+from kky_zsur.genpoints import generate_points
 
 
 def minimal_distance(data):
@@ -20,8 +20,8 @@ def minimal_distance(data):
 
 
 def main():
-    from main_app import readfile
-    data = readfile('data.txt')
+    from main import readfile
+    data = readfile('../data.txt')
     minimal_distance(data)
 
 

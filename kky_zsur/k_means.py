@@ -3,7 +3,7 @@
 """k_means.py: Algoritmus k-means"""
 
 from random import randint
-from maximin import get_distances
+from kky_zsur.maximin import get_distances
 import matplotlib.pyplot as plt
 
 
@@ -86,8 +86,8 @@ def plot_kmeans(dist):
 
 
 def main():
-    from main_app import readfile
-    data = readfile('data.txt')
+    from main import readfile
+    data = readfile('../data.txt')
     # data = [(0, 1), (2, 1), (1, 3), (1, -1), (1, 5), (1, 9), (-1, 7), (3, 7)]
     dist = k_means(data, 3)
     plot_kmeans(dist)

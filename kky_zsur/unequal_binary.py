@@ -1,7 +1,7 @@
 def main():
     # from main_app import readfile
     # data = readfile('data.txt')
-    from k_means import k_means, plot_kmeans
+    from kky_zsur.k_means import k_means, plot_kmeans
     data = [(-3, 0), (3, 2), (-2, 0), (3, 3), (2, 2), (3, -2), (4, -2), (3, -3)]
     dist = k_means(data, 2)
     while len(dist) != len(data):

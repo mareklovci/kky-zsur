@@ -62,8 +62,8 @@ def cluster_levels(data, boundary):
 
 
 def main():
-    from main_app import readfile
-    data = readfile('data.txt')
+    from main import readfile
+    data = readfile('../data.txt')
     # data = [(-3, 1), (1, 1), (-2, 0), (3, -3), (1, 2), (-2, -1)]
     cluster_levels(data, 1.9)
 

@@ -64,8 +64,8 @@ def chain_map(data, iterations, bound):
 
 
 def main():
-    from main_app import readfile
-    data = readfile('data.txt')
+    from main import readfile
+    data = readfile('../data.txt')
     # data = [(-3, 0), (3, 2), (-2, 0), (3, 3), (2, 2), (3, -2), (4, -2), (3, -3)]
     chain_map(data, 1, 9)
 
