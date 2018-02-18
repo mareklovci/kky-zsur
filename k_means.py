@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+"""k_means.py: Algoritmus k-means"""
+
 from random import randint
 from maximin import get_distances
 import matplotlib.pyplot as plt
@@ -17,7 +21,7 @@ def sort_to_classes(distances, minlist):
         for value in distances.values():
             mini = value.get(minimum[0])
             if mini != minimum[1]:
-                del(value[minimum[0]])
+                del value[minimum[0]]
     return distances
 
 
