@@ -84,8 +84,6 @@ def plot_kmeans(dist):
 def main():
     from main_app import readfile
     data = readfile('data.txt')
-    d1, d2 = data['c1'], data['c2']
-    data = list(zip(d1, d2))
     # data = [(0, 1), (2, 1), (1, 3), (1, -1), (1, 5), (1, 9), (-1, 7), (3, 7)]
     dist = k_means(data, 3)
     plot_kmeans(dist)

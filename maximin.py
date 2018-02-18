@@ -52,8 +52,6 @@ def maximin(data, q):
 def main():
     from main_app import readfile
     data = readfile('data.txt')
-    d1, d2 = data['c1'], data['c2']
-    data = list(zip(d1, d2))
     # data = [(2, -3), (3, 3), (2, 2), (-3, 1), (-1, 0), (-3, -2), (1, -2), (3, 2)]
     no_of_clusters = maximin(data, 0.3)
     print(no_of_clusters)

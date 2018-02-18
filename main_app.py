@@ -7,7 +7,7 @@ def readfile(infile):
     Read data from file
 
     :param infile: file in format 'float float'
-    :return: Map with two keys and lists as values
+    :return: list of tuples, tuple = point(x, y)
     """
     data = {'c1': [], 'c2': []}
     with open(infile, 'rt') as f:
@@ -15,6 +15,8 @@ def readfile(infile):
             v1, v2 = line.split()
             data['c1'].append(float(v1))
             data['c2'].append(float(v2))
+    d1, d2 = data['c1'], data['c2']
+    data = list(zip(d1, d2))
     return data
 
 

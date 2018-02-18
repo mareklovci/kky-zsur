@@ -2,11 +2,16 @@ import numpy as np
 import datetime as dt
 
 
+def distanc(a, b):
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+
+
 def generate_matrix(data):
-    matrix = np.zeros((len(data), len(data)))
+    size = len(data)
+    matrix = np.zeros((size, size), dtype=np.float)
     for i in range(len(data)):
         for j in range(i + 1, len(data)):
-            matrix[j, i] = (data[i][0] - data[j][0]) ** 2 + (data[i][1] - data[j][1]) ** 2
+            matrix[j, i] = distanc(data[i], data[j])
             matrix[i, j] = matrix[j, i]
     return matrix
     # for i in np.nditer(matrix, op_flags=['readwrite']):
@@ -58,9 +63,7 @@ def cluster_levels(data, boundary):
 
 def main():
     from main_app import readfile
-    data = readfile('data.txt')  # read file
-    d1, d2 = data['c1'], data['c2']
-    data = list(zip(d1, d2))
+    data = readfile('data.txt')
     # data = [(-3, 1), (1, 1), (-2, 0), (3, -3), (1, 2), (-2, -1)]
     cluster_levels(data, 1.9)
 

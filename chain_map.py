@@ -41,10 +41,9 @@ def chain_map(data, iterations, bound):
     :param iterations: How many times do you want to run the algorithm
     :param data: Entry data in clasic format used in a whole program
     :param bound: Size of a 'jump' from which a new class is recognized
-    :return: printed number of classes and two graphs (one with the chain, the other one shows 'jump' lenghts)
+    :return: printed number of classes and two graphs (one with the chain, the other one shows 'jump' lengths)
     """
-    d1, d2 = data['c1'], data['c2']  # data
-    data = list(zip(d1, d2))  # convert to list of tuples, tuple = point(x, y)
+    d1, d2 = zip(*data)  # unzip data
     for i in range(0, iterations):  # several iterations
         plt.figure(i + 1)  # make new figure
         plt.plot(d1, d2, 'ro')  # plot points to new figure
@@ -66,9 +65,9 @@ def chain_map(data, iterations, bound):
 
 def main():
     from main_app import readfile
-    data = readfile('data.txt')  # read file
-    # data = {'c1': [-3, 3, -2, 3, 2, 3, 4, 3], 'c2': [0, 2, 0, 3, 2, -2, -2, -3]}
-    chain_map(data, 1, 8.5)
+    data = readfile('data.txt')
+    # data = [(-3, 0), (3, 2), (-2, 0), (3, 3), (2, 2), (3, -2), (4, -2), (3, -3)]
+    chain_map(data, 1, 9)
 
 
 if __name__ == '__main__':
