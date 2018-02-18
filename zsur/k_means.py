@@ -3,7 +3,7 @@
 """k_means.py: Algoritmus k-means"""
 
 from random import randint
-from kky_zsur.maximin import get_distances
+from zsur.maximin import get_distances
 import matplotlib.pyplot as plt
 
 

@@ -2,7 +2,7 @@
 
 """bayes.py: Bayesuv klasifikator"""
 
-from kky_zsur.k_means import k_means
+from zsur.k_means import k_means
 
 
 def main():

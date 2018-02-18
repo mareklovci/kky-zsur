@@ -1,2 +1,2 @@
-# kky-zsur
-Semestrální práce k předmětu KKY/ZSUR na Katedře kybernetiky Západočeské univerzity v Plzni
+# zsur
+Semestrální práce k předmětu KKY/ZSUR na katedře kybernetiky Západočeské univerzity v Plzni

@@ -1,5 +1,5 @@
-from kky_zsur.chain_map import chain_map
-from kky_zsur.cluster_levels import cluster_levels
+from zsur.chain_map import chain_map
+from zsur.cluster_levels import cluster_levels
 
 
 def readfile(infile):

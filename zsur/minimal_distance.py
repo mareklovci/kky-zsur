@@ -2,9 +2,9 @@
 
 """minimal_distance.py: Klasifikator podle minimalni vzdalenosti"""
 
-from kky_zsur.k_means import k_means, plot_kmeans
-from kky_zsur.cluster_levels import distanc
-from kky_zsur.genpoints import generate_points
+from zsur.k_means import k_means, plot_kmeans
+from zsur.cluster_levels import distanc
+from zsur.genpoints import generate_points
 
 
 def minimal_distance(data):
