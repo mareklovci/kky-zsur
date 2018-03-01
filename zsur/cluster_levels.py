@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Automaticke urceni poctu trid v datech metodou shlukove hladiny"""
+
 import numpy as np
 import datetime as dt
 

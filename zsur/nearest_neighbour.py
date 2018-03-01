@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
-"""nearest_neighbour.py: Klasifikator podle nejblizsiho a dvou nejblizsich sousedu"""
+# -*- coding: utf-8 -*-
+"""Klasifikator podle nejblizsiho a dvou nejblizsich sousedu"""
 
 from zsur.k_means import k_means, plot_kmeans
 from zsur.cluster_levels import distanc

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
-"""k_means.py: Algoritmus k-means"""
+# -*- coding: utf-8 -*-
+"""Algoritmus k-means pro rozdeleni dat do predem znameho poctu trid"""
 
 from random import randint
 from zsur.maximin import get_distances

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
-"""minimal_distance.py: Klasifikator podle minimalni vzdalenosti"""
+# -*- coding: utf-8 -*-
+"""Klasifikator podle minimalni vzdalenosti"""
 
 from zsur.k_means import k_means, plot_kmeans
 from zsur.cluster_levels import distanc

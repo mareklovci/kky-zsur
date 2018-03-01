@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
-"""bayes.py: Bayesuv klasifikator"""
+# -*- coding: utf-8 -*-
+"""Bayesuv klasifikator"""
 
 from zsur.k_means import k_means
 

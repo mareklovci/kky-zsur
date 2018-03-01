@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Metoda nerovnomerneho binarniho deleni pro rozdeleni dat do predem znameho poctu trid"""
+
+
 def main():
     # from main_app import readfile
     # data = readfile('data.txt')

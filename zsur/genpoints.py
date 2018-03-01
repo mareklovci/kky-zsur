@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-
-"""genpoints.py: Skript pro generovani bodu ve 2D prostoru"""
+# -*- coding: utf-8 -*-
+"""Skript pro generovani site bodu ve 2D prostoru"""
 
 import matplotlib.pyplot as plt
 
