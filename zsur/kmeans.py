@@ -3,7 +3,8 @@
 """Algoritmus k-means pro rozdeleni dat do predem znameho poctu trid"""
 
 from random import randint
-from zsur.maximin import vzdalenosti
+from zsur.maximin import distances_to_centers
+from zsur.cluster_levels import distanc
 import matplotlib.pyplot as plt
 
 
@@ -25,23 +26,8 @@ def sort_to_classes(distances, minlist):
     return distances
 
 
-def get_criterions(distances):
-    criterions = dict.fromkeys(distances, 0)
-    for key, val in distances.items():
-        for value in val.values():
-            criterions[key] += value
-    return criterions
-
-
-def nos_of_items_in_classes(distances):
-    lengths = dict.fromkeys(distances, 0)
-    for key, value in distances.items():
-        lengths[key] = len(value.values())
-    return lengths
-
-
 def get_new_centers(distances):
-    noi = nos_of_items_in_classes(distances)
+    noi = {key: len(val.values()) for key, val in distances.items()}  # dict -> key: how many items is in each class
     newcenters = {}
     for key, value in distances.items():
         newpoint = (0, 0)
@@ -52,17 +38,35 @@ def get_new_centers(distances):
     return newcenters
 
 
-def k_means(data, r):
+def criterion(dist):
+    """
+    Computes criterial values for each center in dict(dist). Computes how far is it from each point in data (additional
+    argument) to every center in dist. Chooses minimal distance for each point and sums those minimums for every center.
+    Next usage: iterative optimization.
+    !!! That is how we did it on the paper. I had to use different approach.
+    I did not computed distance from each point in dataset, but I used points already assigned to class. It is much
+    easier to programm.
+
+    :param dict dist: dict from kmeans
+    :return: criterial values for each center (J values)
+    """
+    distances = dict.fromkeys(dist)
+    for key, val in dist.items():
+        distances[key] = {point: distanc(key, point) for point in val}
+    crits = {key: int(sum(val.values())) for key, val in distances.items()}
+    return crits
+
+
+def kmeans(data, r):
     distances = dict((center, {}) for center in get_centers(data, r))
     while True:
-        distances = vzdalenosti(distances, data)
+        distances = distances_to_centers(distances, data)
         minlist = []
         for value in zip(*(val.items() for val in distances.values())):
             minlist.append(min(value))
         sort_to_classes(distances, minlist)
         newcenters = get_new_centers(distances)
         if newcenters.keys() == distances.keys():
-            # print(get_criterions(distances))
             break
         else:
             distances = newcenters
@@ -88,7 +92,9 @@ def main():
     from main import readfile
     data = readfile('../data.txt')
     # data = [(0, 1), (2, 1), (1, 3), (1, -1), (1, 5), (1, 9), (-1, 7), (3, 7)]
-    dist = k_means(data, 3)
+    dist = kmeans(data, 3)
+    crits = criterion(dist)
+    print(crits)
     plot_kmeans(dist)
 
 

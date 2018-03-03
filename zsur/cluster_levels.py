@@ -46,8 +46,8 @@ def cluster_levels(data, boundary):
     find it on github...
     https://github.com/mareklovci/zsur/blob/6eaba2de4b15933412a6da7b28efc329617b4111/zsur/cluster_levels.py
 
-    :param data: entry data
-    :param boundary: size of a 'jump' from which a new class is recognized
+    :param list data: entry data
+    :param int boundary: size of a 'jump' from which a new class is recognized
     :return: number of classes in dataset
     """
     matrix = generate_matrix(data)

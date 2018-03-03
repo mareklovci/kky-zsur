@@ -12,8 +12,7 @@ def distances(points):
     """
     Makes list of distances from point to point.
 
-    :param points: list of points to get distances from
-    :type points: list
+    :param list points: list of points to get distances from
     :return: list of distances from point to point
     """
     dist = [sqrt(distanc(points[i], points[i+1])) for i in range(len(points) - 1)]
@@ -24,10 +23,8 @@ def distance_sort(data, point):
     """
     Sorts points by distance in a way the algorithm needs it. This actually makes the chain map.
 
-    :param data: list of tuples where tuple is one point (x, y,...)
-    :type data: list
-    :param point: starting point
-    :type point: tuple
+    :param list data: list of tuples where tuple is one point (x, y,...)
+    :param tuple point: starting point
     :return: sorted list of points
     """
     sorted_by_distance = [point]  # ok, my point is the first in sorted list (distance is 0)
@@ -45,14 +42,14 @@ def chain_map(data, bound):
     """
     Chain map alogrithm
 
-    :param data: entry data in clasic format used in a whole program
-    :param bound: size of a 'jump' from which a new class is recognized
+    :param list data: entry data in clasic format used in a whole program
+    :param float bound: size of a 'jump' from which a new class is recognized
     :return: sorted points, list of distances from point to point, number of classes in data
     """
     rand = randint(0, len(data) - 1)  # select random starting point
     points = distance_sort(data, data[rand])  # sort data by distance, see func docs for more info
     dists = distances(points)
-    # alterantive to code below: len([i for i in dists if i >= bound]) + 1
+    # alternative to code below: len([i for i in dists if i >= bound]) + 1
     pocet_trid = len(list(filter(lambda x: x >= bound, dists))) + 1
     return points, dists, pocet_trid
 
@@ -61,9 +58,9 @@ def plot_chainmap(inpt, data, bound):
     """
     Plots chain map algorithm - makes two graphs and one print()
 
-    :param inpt: (points, dists, pocet_trid) - output from chain_map()
-    :param data: entry data
-    :param bound: size of a 'jump' from which a new class is recognized
+    :param tuple inpt: (points, dists, pocet_trid) - output from chain_map()
+    :param list data: entry data
+    :param float bound: size of a 'jump' from which a new class is recognized
     :return: printed number of classes and two graphs (one with the chain, the other one shows 'jump' lengths)
     """
     points, dists, pocet_trid = inpt
@@ -85,7 +82,6 @@ def plot_chainmap(inpt, data, bound):
 def main():
     from main import readfile
     data = readfile('../data.txt')
-    # data = [(-3, 0), (3, 2), (-2, 0), (3, 3), (2, 2), (3, -2), (4, -2), (3, -3)]
     chmap = chain_map(data, 9)
     plot_chainmap(chmap, data, 9)
 

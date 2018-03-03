@@ -11,11 +11,19 @@ def average_center_distance(q, distances):
     return sum(distances) / len(distances) * q
 
 
-def vzdalenosti(distances, data):
-    distances = distances.copy()
-    for stred in distances.keys():
-        distances[stred] = {key: distanc(key, stred) for key in data}
-    return distances
+def distances_to_centers(distances, data):
+    """
+    For each datum in 'data' gets eucledian distance from self to each key in 'distances' dict().
+    This distance is stored in nested dict in format >> distances.keys(): {'all data points': 'dist from point to key'}
+
+    :param dict distances: unspecified dictionary
+    :param list data: list of tuples
+    :return: nested dict in format >> distances.keys(): {'all data points': 'dist from point to key'}
+    """
+    centers = dict.fromkeys(distances)
+    for center in centers.keys():
+        centers[center] = {key: distanc(key, center) for key in data}
+    return centers
 
 
 def get_maxmin(distances):
@@ -33,7 +41,7 @@ def maximin(data, q):
     data.remove(mi2)
     distances = {mi1: {}, mi2: {}}
     while True:
-        distances = vzdalenosti(distances, data)
+        distances = distances_to_centers(distances, data)
         maxvalue = get_maxmin(distances)
         avg = average_center_distance(q, distances)
         if maxvalue[1] > avg:
