@@ -19,7 +19,12 @@ def nearest_neighbour(data, classes, space_size=(-20, 20), step=1):
             for val in value:
                 if val == sorted_means[0]:
                     kmeans_toplot[key].append(trypoint)
-    plot_kmeans(kmeans_toplot)
+    return kmeans_toplot
+
+
+def average_dist(bod, points):
+    distances = [distanc(point, bod) for point in points]
+    return sum(distances)/len(points)
 
 
 def knearest_neighbour(data, classes, space_size=(-20, 20), step=1):
@@ -29,19 +34,19 @@ def knearest_neighbour(data, classes, space_size=(-20, 20), step=1):
     for trypoint in trypoints:
         for val in kmeans.values():
             val.sort(key=lambda p: distanc(trypoint, p))
-        newdict = {}
-        for key, val in kmeans.items():
-            newdict[key] = (distanc(kmeans[key][0], trypoint) + distanc(kmeans[key][1], trypoint))/2
+        newdict = {key: average_dist(trypoint, kmeans[key]) for key in kmeans.keys()}
         keywithminvalue = min(newdict, key=newdict.get)
         means_toplot[keywithminvalue].append(trypoint)
-    plot_kmeans(means_toplot)
+    return means_toplot
 
 
 def main():
     from main import readfile
     data = readfile('../data.txt')
-    nearest_neighbour(data, 3)
-    knearest_neighbour(data, 3)
+    processed_data1 = nearest_neighbour(data, 3)
+    processed_data2 = knearest_neighbour(data, 3)
+    plot_kmeans(processed_data1)
+    plot_kmeans(processed_data2)
 
 
 if __name__ == '__main__':

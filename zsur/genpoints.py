@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Skript pro generovani site bodu ve 2D prostoru"""
+"""Funkce pro generovani site bodu ve 2D prostoru"""
 
 import matplotlib.pyplot as plt
 
 
 def generate_points(start, end, step):
-    data = list()
-    for i in range(start, end, step):
-        for j in range(start, end, step):
-            point = (i, j)
-            data.append(point)
+    data = [(i, j) for i in range(start, end, step) for j in range(start, end, step)]
     return data
 
 

@@ -3,7 +3,7 @@
 """Algoritmus k-means pro rozdeleni dat do predem znameho poctu trid"""
 
 from random import randint
-from zsur.maximin import get_distances
+from zsur.maximin import vzdalenosti
 import matplotlib.pyplot as plt
 
 
@@ -55,8 +55,7 @@ def get_new_centers(distances):
 def k_means(data, r):
     distances = dict((center, {}) for center in get_centers(data, r))
     while True:
-        for center in distances.keys():
-            distances[center] = get_distances(data, center)
+        distances = vzdalenosti(distances, data)
         minlist = []
         for value in zip(*(val.items() for val in distances.values())):
             minlist.append(min(value))

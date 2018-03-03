@@ -1,30 +1,34 @@
-from zsur.chain_map import chain_map
-from zsur.cluster_levels import cluster_levels
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Main file to test the whole project"""
+
+from zsur.chain_map import chain_map, plot_chainmap
+from zsur.cluster_levels import cluster_levels, print_clusterlvls
 
 
 def readfile(infile):
     """
     Read data from file
 
-    :param infile: file in format 'float float'
+    :param infile: file with lines in format 'float float'
     :return: list of tuples, tuple = point(x, y)
     """
-    data = {'c1': [], 'c2': []}
+    data = list()
     with open(infile, 'rt') as f:
         for line in f:
             v1, v2 = line.split()
-            data['c1'].append(float(v1))
-            data['c2'].append(float(v2))
-    d1, d2 = data['c1'], data['c2']
-    data = list(zip(d1, d2))
+            data.append((float(v1), float(v2)))
     return data
 
 
 def main():
     data = readfile('data.txt')
     # 1b - just add data, number of iterations to do and boundary to find number of classes from
-    chain_map(data, 1, 9)
-    cluster_levels(data, 1.9)
+    chmap = chain_map(data, 9)
+    plot_chainmap(chmap, data, 9)
+
+    lvls = cluster_levels(data, 1.9)
+    print_clusterlvls(lvls)
 
 
 if __name__ == '__main__':
