@@ -8,13 +8,19 @@ from zsur.cluster_levels import distanc
 import matplotlib.pyplot as plt
 
 
-def get_centers(data, r):
-    # TODO: misto r nahodnych stredu vem r od sebe nejvzdalenejsich
-    stredy = []
-    for i in range(r):
-        point = data[randint(0, len(data) - 1)]
-        stredy.append(point)
-    return stredy
+def getcenter(data, r):
+    """
+    Generator of 'r' random centers, generated from 'data'. Why is this generator? Why not...
+    # TODO: misto 'r' nahodnych stredu vem 'r' od sebe nejvzdalenejsich
+
+    :param data: data to generate centers from
+    :param int r: how many centers to generate
+    :return: generator of points -> tuple(x, y)
+    """
+    i = 0
+    while i < r:
+        yield data[randint(0, len(data) - 1)]
+        i += 1
 
 
 def sort_to_classes(distances, minlist):
@@ -58,7 +64,7 @@ def criterion(dist):
 
 
 def kmeans(data, r):
-    distances = dict((center, {}) for center in get_centers(data, r))
+    distances = dict((c, {}) for c in getcenter(data, r))
     while True:
         distances = distances_to_centers(distances, data)
         minlist = []
@@ -91,8 +97,7 @@ def plot_kmeans(dist):
 def main():
     from main import readfile
     data = readfile('../data.txt')
-    # data = [(0, 1), (2, 1), (1, 3), (1, -1), (1, 5), (1, 9), (-1, 7), (3, 7)]
-    dist = kmeans(data, 3)
+    dist = kmeans(data, 2)
     crits = criterion(dist)
     print(crits)
     plot_kmeans(dist)

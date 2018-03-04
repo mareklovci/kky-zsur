@@ -47,7 +47,7 @@ def cluster_levels(data, boundary):
     https://github.com/mareklovci/zsur/blob/6eaba2de4b15933412a6da7b28efc329617b4111/zsur/cluster_levels.py
 
     :param list data: entry data
-    :param int boundary: size of a 'jump' from which a new class is recognized
+    :param float boundary: size of a 'jump' from which a new class is recognized (aka 'magic constant')
     :return: number of classes in dataset
     """
     matrix = generate_matrix(data)
@@ -58,7 +58,7 @@ def cluster_levels(data, boundary):
     classes = 0
     for i in range(len(minimums)):
         rev = list(reversed(minimums))
-        if rev[i][0] / boundary >= rev[i + 1][0]:  # 1.9 magic constant
+        if rev[i][0] / boundary >= rev[i + 1][0]:
             classes += 1
         else:
             break
@@ -72,7 +72,6 @@ def print_clusterlvls(classes):
 def main():
     from main import readfile
     data = readfile('../data.txt')
-    # data = [(-3, 1), (1, 1), (-2, 0), (3, -3), (1, 2), (-2, -1)]
     lvls = cluster_levels(data, 1.9)
     print_clusterlvls(lvls)
 

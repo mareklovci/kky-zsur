@@ -51,23 +51,21 @@ def chain_map(data, bound):
     dists = distances(points)
     # alternative to code below: len([i for i in dists if i >= bound]) + 1
     pocet_trid = len(list(filter(lambda x: x >= bound, dists))) + 1
-    return points, dists, pocet_trid
+    return points, dists, pocet_trid, bound
 
 
-def plot_chainmap(inpt, data, bound):
+def plot_chainmap(inpt):
     """
     Plots chain map algorithm - makes two graphs and one print()
 
-    :param tuple inpt: (points, dists, pocet_trid) - output from chain_map()
-    :param list data: entry data
-    :param float bound: size of a 'jump' from which a new class is recognized
+    :param tuple inpt: (points, dists, pocet_trid, bound) - output from chain_map()
     :return: printed number of classes and two graphs (one with the chain, the other one shows 'jump' lengths)
     """
-    points, dists, pocet_trid = inpt
-    d1, d2 = zip(*data)  # unzip data
+    points, dists, pocet_trid, bound = inpt
+    d1, d2 = zip(*points)  # unzip data
     plt.figure()  # make new figure
     plt.plot(d1, d2, 'ro')  # plot points to new figure
-    for j in range(len(data) - 1):
+    for j in range(len(points) - 1):
         p1, p2 = points[j], points[j + 1]
         plt.plot((p1[0], p2[0]),
                  (p1[1], p2[1]), 'b')
@@ -83,7 +81,7 @@ def main():
     from main import readfile
     data = readfile('../data.txt')
     chmap = chain_map(data, 9)
-    plot_chainmap(chmap, data, 9)
+    plot_chainmap(chmap)
 
 
 if __name__ == '__main__':

@@ -25,7 +25,7 @@ def main():
     data = readfile('data.txt')
     # 1b - just add data, number of iterations to do and boundary to find number of classes from
     chmap = chain_map(data, 9)
-    plot_chainmap(chmap, data, 9)
+    plot_chainmap(chmap)
 
     lvls = cluster_levels(data, 1.9)
     print_clusterlvls(lvls)
