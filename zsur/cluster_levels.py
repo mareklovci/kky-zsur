@@ -5,8 +5,23 @@
 import numpy as np
 
 
-def distanc(a, b):
-    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
+def distanc(*args):
+    """
+    Calcs squared euclidean distance between two points represented by n dimensional vector
+
+    :param tuple args: points to calc distance from
+    :return: euclidean distance of points in *args
+    """
+    if len(args) == 1:
+        raise Exception('Not enough input arguments (expected two)')
+    if len(args) > 2:
+        raise Exception('Too many input arguments (expected two)')
+    else:
+        vec1, vec2 = args
+    if len(vec1) != len(vec2):
+        raise Exception('Input vectors have to have same length')
+    else:
+        return sum((a - b) ** 2 for a, b in zip(vec1, vec2))
 
 
 def generate_matrix(data):

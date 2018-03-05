@@ -17,10 +17,15 @@ def getcenter(data, r):
     :param int r: how many centers to generate
     :return: generator of points -> tuple(x, y)
     """
+    chosen = set()  # already chosen points
     i = 0
     while i < r:
-        yield data[randint(0, len(data) - 1)]
-        i += 1
+        point = data[randint(0, len(data) - 1)]  # choose point
+        if point not in chosen:
+            yield point
+            i += 1
+        else:  # if point was already chosen, choose the other one
+            continue
 
 
 def sort_to_classes(distances, minlist):
@@ -97,7 +102,7 @@ def plot_kmeans(dist):
 def main():
     from main import readfile
     data = readfile('../data.txt')
-    dist = kmeans(data, 2)
+    dist = kmeans(data, 3)
     crits = criterion(dist)
     print(crits)
     plot_kmeans(dist)
