@@ -3,7 +3,7 @@
 """Automaticke urceni poctu trid v datech metodou retezove mapy"""
 
 from math import sqrt
-from random import randint
+from random import choice
 from zsur.cluster_levels import distanc
 import matplotlib.pyplot as plt
 
@@ -46,8 +46,8 @@ def chain_map(data, bound):
     :param float bound: size of a 'jump' from which a new class is recognized
     :return: sorted points, list of distances from point to point, number of classes in data
     """
-    rand = randint(0, len(data) - 1)  # select random starting point
-    points = distance_sort(data, data[rand])  # sort data by distance, see func docs for more info
+    rand = choice(data)  # select random starting point
+    points = distance_sort(data, rand)  # sort data by distance, see func docs for more info
     dists = distances(points)
     # alternative to code below: len([i for i in dists if i >= bound]) + 1
     pocet_trid = len(list(filter(lambda x: x >= bound, dists))) + 1

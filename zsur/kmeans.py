@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Algoritmus k-means pro rozdeleni dat do predem znameho poctu trid"""
 
-from random import randint
+from random import choice
 from zsur.maximin import distances_to_centers
 from zsur.cluster_levels import distanc
 import matplotlib.pyplot as plt
@@ -20,7 +20,7 @@ def getcenter(data, r):
     chosen = set()  # already chosen points
     i = 0
     while i < r:
-        point = data[randint(0, len(data) - 1)]  # choose point
+        point = choice(data)  # choose point
         if point not in chosen:
             yield point
             i += 1
