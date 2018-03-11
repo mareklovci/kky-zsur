@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Automaticke urceni poctu trid v datech metodou shlukove hladiny"""
 
-import numpy as np
 import datetime as dt
+import numpy as np
 
 
 def distanc(*args):
@@ -27,31 +27,53 @@ def distanc(*args):
 
 def generate_matrix(data):
     size = len(data)
-    matrix = np.zeros((size, size), dtype=np.int)
-    for i in range(len(data)):
-        for j in range(i + 1, len(data)):
-            matrix[j, i] = distanc(data[i], data[j])
-            matrix[i, j] = matrix[j, i]
+    matrix = {key: list() for key in range(size)}
+    for i in range(size):
+        for j in range(i, size):
+            matrix[j].append(distanc(data[i], data[j]))
     return matrix
 
 
 def matrix_min(matrix):
-    minimum = np.min(matrix[np.nonzero(matrix)])
-    index1, index2 = np.where(matrix == minimum)
-    if len(index1) >= 2:
-        return minimum, index2[0], index2[1]
-    else:
-        return minimum, index1[0], index2[0]
-
-
-def reduce_matrix(matrix, row, column):
-    for i in range(len(matrix)):
-        if matrix[row, i] > matrix[column, i]:
-            matrix[i, row] = matrix[i, column]
+    minimums = []
+    for val in matrix.values():
+        filtered = list(filter(lambda a: a != 0, val))
+        if not filtered:
+            continue
         else:
-            matrix[i, column] = matrix[i, row]
-    matrix = np.delete(matrix, column, 1)
-    matrix = np.delete(matrix, column, 0)
+            minimums.append(min(filtered))
+    minimin = min(minimums)
+    for key, val in matrix.items():
+        if minimin in val:
+            index = val.index(minimin)
+            return minimin, key, index
+
+
+def reconstruct(matrix, i):
+    size = len(matrix)
+    if len(matrix[i]) == size:
+        data1 = matrix[i]
+    else:
+        data1 = matrix[i][:-1]
+        for val in matrix.values():
+            if len(val) > i:
+                data1.append(val[i])
+    return data1
+
+
+def restruct(matrix, row, datamin):
+    rowsize = len(matrix[row])
+    matrix[row] = datamin[:rowsize]
+    for i in range(len(datamin) - rowsize + 1):
+        matrix[i + row][row] = datamin[i + rowsize - 1]
+    return matrix
+
+
+def removal(matrix, column):
+    matrix.pop(column)
+    for key, val in matrix.items():
+        if len(val) > column:
+            del val[column]
     return matrix
 
 
@@ -59,18 +81,21 @@ def reduce_matrix2(matrix, row, column):
     """
     Function with side effect!
 
-    :param matrix:
+    :param dict matrix:
     :param row:
     :param column:
     :return:
     """
-    for i in range(len(matrix)):
-        if matrix[row, i] > matrix[column, i]:
-            matrix[i, row] = matrix[i, column]
-        else:
-            matrix[i, column] = matrix[i, row]
-    matrix[column, :] = 0
-    matrix[:, column] = 0
+    if row > column:
+        row, column = column, row
+    data1 = reconstruct(matrix, row)
+    data2 = reconstruct(matrix, column)
+    datamin = [min(i) for i in zip(data1, data2)]
+    matrix = restruct(matrix, row, datamin)
+    matrix = removal(matrix, column)
+    legn = len(matrix)
+    for i in range(column, legn):
+        matrix[i] = matrix.pop(i + 1)
     return matrix
 
 
