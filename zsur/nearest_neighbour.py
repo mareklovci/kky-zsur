@@ -5,6 +5,7 @@
 from zsur.kmeans import kmeans, plot_kmeans
 from zsur.cluster_levels import distanc
 from zsur.genpoints import generate_points
+from zsur.readfile import readfile
 import itertools
 
 
@@ -41,7 +42,6 @@ def knearest_neighbour(data, classes, space_size=(-20, 20), step=1):
 
 
 def main():
-    from main import readfile
     data = readfile('../data.txt')
     processed_data1 = nearest_neighbour(data, 3)
     processed_data2 = knearest_neighbour(data, 3)

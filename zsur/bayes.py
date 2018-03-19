@@ -3,11 +3,18 @@
 """Bayesuv klasifikator"""
 
 from zsur.kmeans import kmeans
+from zsur.readfile import readfile
+
+
+def sigma(data):
+    sigm = 0
+    pass
 
 
 def probability(data):
     """
     Function to calculate P(omega)
+
     :param dict data: dict to get data from
     :return:
     """
@@ -18,7 +25,6 @@ def probability(data):
 
 
 def main():
-    from main import readfile
     data = readfile('../data.txt')
     dist = kmeans(data, 3)
     prob = probability(dist)

@@ -5,6 +5,7 @@
 from math import sqrt
 from random import choice
 from zsur.cluster_levels import distanc
+from zsur.readfile import readfile
 import matplotlib.pyplot as plt
 
 
@@ -78,7 +79,6 @@ def plot_chainmap(inpt):
 
 
 def main():
-    from main import readfile
     data = readfile('../data.txt')
     chmap = chain_map(data, 9)
     plot_chainmap(chmap)

@@ -3,7 +3,7 @@
 """Automaticke urceni poctu trid v datech metodou shlukove hladiny"""
 
 import numpy as np
-import datetime as dt
+from zsur.readfile import readfile
 
 
 def distanc(*args):
@@ -27,7 +27,7 @@ def distanc(*args):
 
 def generate_matrix(data):
     size = len(data)
-    matrix = np.zeros((size, size), dtype=np.int)
+    matrix = np.zeros((size, size), dtype=np.float)
     for i in range(len(data)):
         for j in range(i + 1, len(data)):
             matrix[j, i] = distanc(data[i], data[j])
@@ -74,6 +74,17 @@ def reduce_matrix2(matrix, row, column):
     return matrix
 
 
+def classes(minimums, boundary):
+    clas = 0
+    rev = list(reversed(minimums))
+    for i in range(len(minimums)):
+        if rev[i][0] / boundary >= rev[i + 1][0]:
+            clas += 1
+        else:
+            break
+    return clas
+
+
 def cluster_levels(data, boundary):
     """
     Does aglomerative algorithm, I used control prints here, to know how long it takes to generate matrix,
@@ -85,37 +96,21 @@ def cluster_levels(data, boundary):
     :param float boundary: size of a 'jump' from which a new class is recognized (aka 'magic constant')
     :return: number of classes in dataset
     """
-    data = [(int(round(i)), int(round(j))) for i, j in data]
-    t0 = dt.datetime.now()
     matrix = generate_matrix(data)
-    t1 = dt.datetime.now()
-    print('cas', t1 - t0)
     minimums = []
     for i in range(len(matrix) - 1):
         minimums.append(matrix_min(matrix))
         matrix = reduce_matrix2(matrix, minimums[i][1], minimums[i][2])
-    classes = 0
-    for i in range(len(minimums)):
-        rev = list(reversed(minimums))
-        if rev[i][0] / boundary >= rev[i + 1][0]:
-            classes += 1
-        else:
-            break
-    return classes
+    return classes(minimums, boundary)
 
 
-def print_clusterlvls(classes):
-    print('\nAglomerativni metodou byly nalezeny: {} tridy'.format(classes))
+def print_clusterlvls(clas):
+    print('\nAglomerativni metodou byly nalezeny: {} tridy'.format(clas))
 
 
 def main():
-    from main import readfile
     data = readfile('../data.txt')
-    # data = [(-3, 1), (1, 1), (-2, 0), (3, -3), (1, 2), (-2, -1)]
-    t0 = dt.datetime.now()
     lvls = cluster_levels(data, 1.9)
-    t1 = dt.datetime.now()
-    print('cas', t1 - t0)
     print_clusterlvls(lvls)
 
 

@@ -5,6 +5,7 @@
 from random import choice
 from zsur.maximin import distances_to_centers
 from zsur.cluster_levels import distanc
+from zsur.readfile import readfile
 import matplotlib.pyplot as plt
 
 
@@ -100,7 +101,6 @@ def plot_kmeans(dist):
 
 
 def main():
-    from main import readfile
     data = readfile('../data.txt')
     dist = kmeans(data, 3)
     crits = criterion(dist)
