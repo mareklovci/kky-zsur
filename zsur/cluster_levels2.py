@@ -78,7 +78,7 @@ def removal(matrix, column):
     return matrix
 
 
-def reduce_matrix2(matrix, row, column):
+def reduce_matrix(matrix, row, column):
     """
     Function with side effect!
 
@@ -130,7 +130,7 @@ def cluster_levels(data, boundary):
     minimums = []
     for i in range(len(matrix) - 1):
         minimums.append(matrix_min(matrix))
-        matrix = reduce_matrix2(matrix, minimums[i][1], minimums[i][2])
+        matrix = reduce_matrix(matrix, minimums[i][1], minimums[i][2])
     return classes(minimums, boundary)
 
 

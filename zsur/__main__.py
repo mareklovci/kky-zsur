@@ -7,11 +7,19 @@ from zsur.chain_map import chain_map, plot_chainmap
 from zsur.cluster_levels import cluster_levels, print_clusterlvls
 
 
-def main():
+__all__ = ('main',)  # list of public objects of module
+
+
+def rf():
     try:
-        data = readfile('data.txt')
+        data = readfile('data.txt')  # run with command line
     except FileNotFoundError:
-        data = readfile('../data.txt')
+        data = readfile('../data.txt')  # run directly __main__.py
+    return data
+
+
+def main():
+    data = rf()
     # 1b - just add data, number of iterations to do and boundary to find number of classes from
     chmap = chain_map(data, 9)
     plot_chainmap(chmap)
