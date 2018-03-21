@@ -42,27 +42,36 @@ def probability(data: dict) -> dict:
     return probabi
 
 
-def normal_guess(point, sigm, mean, prob):
-    normal = multivariate_normal(mean=mean, cov=sigm)
-    return prob * normal.pdf(point)
+def normal(point, sigm, mean, prob):
+    norm = multivariate_normal(mean=mean, cov=sigm)
+    return prob * norm.pdf(point)
 
 
-def is_pos_def(x):
-    return np.all(np.linalg.eigvals(x) > 0)
-
-
-def bayes(data, classes, space_size=(-20, 20), step=1):
-    dist = kmeans(data, classes)
-    trypoints = generate_points(space_size[0], space_size[1], step)
-    prob = probability(dist)
+def means(dist):
     prumery = dict.fromkeys(dist)
     for key, val in dist.items():
         ls1, ls2 = zip(*val)
         s1, s2 = sum(ls1), sum(ls2)
-        prumery[key] = tuple(map(lambda x: x/len(val), (s1, s2)))
+        prumery[key] = tuple(map(lambda x: x / len(val), (s1, s2)))
+    return prumery
+
+
+def bayes(data, classes, space_size=(-20, 20), step=1):
+    """
+
+    :param data:
+    :param classes:
+    :param space_size:
+    :param float step:
+    :return:
+    """
+    dist = kmeans(data, classes)
+    trypoints = generate_points(space_size[0], space_size[1], step)
+    prob = probability(dist)
+    prumery = means(dist)
     sigm = sigma(dist, prumery)
     for point in trypoints:
-        rozhodovaci = {key: normal_guess(point, sigm[key], prumery[key], prob[key]) for key in dist.keys()}
+        rozhodovaci = {key: normal(point, sigm[key], prumery[key], prob[key]) for key in dist.keys()}
         keywithmaxvalue = max(rozhodovaci, key=rozhodovaci.get)
         dist[keywithmaxvalue].append(point)
     return dist
@@ -70,7 +79,7 @@ def bayes(data, classes, space_size=(-20, 20), step=1):
 
 def main():
     data = readfile('../data.txt')
-    baye = bayes(data, 3)
+    baye = bayes(data, 3, step=0.4)
     plot_kmeans(baye)
 
 

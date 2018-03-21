@@ -3,10 +3,21 @@
 """Funkce pro generovani site bodu ve 2D prostoru"""
 
 import matplotlib.pyplot as plt
+import numbers
+
+
+def frange(start, stop, step):
+    i = start
+    while i < stop:
+        yield i
+        i += step
 
 
 def generate_points(start, end, step):
-    data = [(i, j) for i in range(start, end, step) for j in range(start, end, step)]
+    if isinstance(step, numbers.Real):
+        data = [(i, j) for i in frange(start, end, step) for j in frange(start, end, step)]
+    else:
+        data = [(i, j) for i in range(start, end, step) for j in range(start, end, step)]
     return data
 
 
