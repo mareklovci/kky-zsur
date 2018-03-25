@@ -69,6 +69,14 @@ def criterion(dist):
     return crits
 
 
+def update_list_dict(d: dict, key, value):
+    """Side effect function!"""
+    if d[key] is None:
+        d[key] = [value]
+    else:
+        d[key].append(value)
+
+
 def kmeans(data, r):
     distances = dict((c, {}) for c in getcenter(data, r))
     while True:
@@ -85,10 +93,7 @@ def kmeans(data, r):
     points = dict.fromkeys(distances)
     for key, value in distances.items():
         for k in value.keys():
-            if points[key] is None:
-                points[key] = [k]
-            else:
-                points[key].append(k)
+            update_list_dict(points, key, k)
     return points
 
 

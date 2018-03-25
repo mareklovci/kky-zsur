@@ -9,8 +9,39 @@
 
 from zsur.genpoints import generate_points
 from zsur.readfile import readfile
-from zsur.kmeans import kmeans, plot_kmeans
+from zsur.kmeans import kmeans, plot_kmeans, update_list_dict
 import numpy as np
+import matplotlib.pyplot as plt
+from math import sqrt
+
+
+def get_lines_constant_increment(data: dict, beta):
+    lines = dict.fromkeys(data, [1, 1, 1])  # vyhrazeni prostoru pro koeficienty primek
+    for key, val in data.items():
+        cont = True
+        while cont:
+            cont = False
+            for k, v in data.items():
+                q = 1 if key == k else -1
+                for item in v:
+                    x = np.array((1, item[0], item[1]))
+                    if x.dot(lines[key]) * q < 0:
+                        a = item[0]
+                        b = item[1]
+                        ck = beta / sqrt(a ^ 2 + b ^ 2)
+                        lines[key] = np.transpose(lines[key]) + (ck * x * q)
+                        cont = True
+    lines = {k: tuple(v) for k, v in lines.items()}
+    return lines
+
+
+def merge_dicts(dict1: dict, dict2: dict):
+    for k, v in dict2.items():
+        if not v:
+            continue
+        else:
+            dict1[k] = dict1[k] + v
+    return dict1
 
 
 def get_lines_ross(data: dict):
@@ -36,31 +67,48 @@ def classify_ross(lines, trypoints):
         sides = dict.fromkeys(lines)
         for key, val in lines.items():
             sides[key] = val[0] * point[0] + val[1] * point[1] + val[2]
-        keys = [k for k, v in sides.items() if v > 1]
+        keys = [k for k, v in sides.items() if v < 1]
         if len(keys) > 1:
             continue
         else:
-            k = keys[0]
-            if classified[k] is None:
-                classified[k] = [point]
+            if not keys:
+                continue
             else:
-                classified[k].append(point)
+                update_list_dict(classified, keys[0], point)
     return classified
 
 
-def rossenblatt(data, classes, space_size=(-20, 20), step=1):
-    data = kmeans(data, classes)
+def rossenblatt(data, space_size=(-20, 20), step=1):
     lines = get_lines_ross(data)
+    plot_lines(lines)
     trypoints = generate_points(space_size[0], space_size[1], step)
     classified = classify_ross(lines, trypoints)
-    data = data.update(classified)
+    data = merge_dicts(data, classified)
     return data
+
+
+def constant_increment(data, beta, space_size=(-20, 20), step=1):
+    lines = get_lines_constant_increment(data, beta)
+    plot_lines(lines)
+    trypoints = generate_points(space_size[0], space_size[1], step)
+    classified = classify_ross(lines, trypoints)
+    data = merge_dicts(data, classified)
+    return data
+
+
+def plot_lines(lines: dict):
+    t1 = np.arange(-20, 20, 1)
+    for v in lines.values():
+        plt.plot(t1, v[0]*t1 + v[1]*t1 + v[2])
 
 
 def main():
     data = readfile('../data.txt')
-    ross = rossenblatt(data, 3)
+    data = kmeans(data, 3)
+    ross = rossenblatt(data)
     plot_kmeans(ross)
+    const_incr = constant_increment(data, 0.5)
+    plot_kmeans(const_incr)
 
 
 if __name__ == '__main__':
