@@ -3,9 +3,7 @@
 """Algoritmus k-means pro rozdeleni dat do predem znameho poctu trid"""
 
 from random import choice
-from zsur.maximin import distances_to_centers
-from zsur.cluster_levels import distanc
-from zsur.readfile import readfile
+from zsur import distances_to_centers, distanc, readfile
 import matplotlib.pyplot as plt
 
 

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 """Main file to test the whole project"""
 
-from zsur.readfile import readfile
-from zsur.chain_map import chain_map, plot_chainmap
-from zsur.cluster_levels import cluster_levels, print_clusterlvls
+from zsur import readfile, chain_map, plot_chainmap, cluster_levels, print_clusterlvls
 
 
 __all__ = ('main',)  # list of public objects of module
