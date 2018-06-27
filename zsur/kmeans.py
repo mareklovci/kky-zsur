@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 """Algoritmus k-means pro rozdeleni dat do predem znameho poctu trid"""
 
+import logging
 from random import choice
 from zsur import distances_to_centers, distanc, readfile
 import matplotlib.pyplot as plt
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def getcenter(data, r):
@@ -95,6 +99,10 @@ def kmeans(data, r):
     return points
 
 
+def iterative_optimization(dist):
+    pass
+
+
 def plot_kmeans(dist):
     for key, value in dist.items():
         x, y = zip(*value)
@@ -107,7 +115,7 @@ def main():
     data = readfile('../data.txt')
     dist = kmeans(data, 3)
     crits = criterion(dist)
-    print(crits)
+    logging.info('Values of criterial function: {}'.format(crits))
     plot_kmeans(dist)
 
 

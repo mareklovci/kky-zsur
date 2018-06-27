@@ -2,11 +2,15 @@
 # -*- coding: utf-8 -*-
 """Automaticke urceni poctu trid v datech metodou retezove mapy"""
 
+import logging
 from math import sqrt
 from random import choice
 from zsur.cluster_levels import distanc
 from zsur.readfile import readfile
 import matplotlib.pyplot as plt
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def distances(points):
@@ -52,6 +56,7 @@ def chain_map(data, bound):
     dists = distances(points)
     # alternative to code below: len([i for i in dists if i >= bound]) + 1
     pocet_trid = len(list(filter(lambda x: x >= bound, dists))) + 1
+    logger.info('Metodou retezove mapy byly nalezeny {} tridy'.format(pocet_trid))
     return points, dists, pocet_trid, bound
 
 
@@ -70,7 +75,6 @@ def plot_chainmap(inpt):
         p1, p2 = points[j], points[j + 1]
         plt.plot((p1[0], p2[0]),
                  (p1[1], p2[1]), 'b')
-    print('Metodou retezove mapy byly nalezeny: {} tridy'.format(pocet_trid))
     plt.figure()
     plt.plot([i for i in range(len(dists))],
              [bound for _ in range(len(dists))])

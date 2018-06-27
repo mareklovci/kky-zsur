@@ -2,8 +2,12 @@
 # -*- coding: utf-8 -*-
 """Automaticke urceni poctu trid v datech metodou shlukove hladiny"""
 
+import logging
 import numpy as np
 from zsur.readfile import readfile
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def distanc(*args):
@@ -26,12 +30,14 @@ def distanc(*args):
 
 
 def generate_matrix(data):
+    logging.info('Generating matrix from data')
     size = len(data)
     matrix = np.zeros((size, size), dtype=np.float)
     for i in range(len(data)):
         for j in range(i + 1, len(data)):
             matrix[j, i] = distanc(data[i], data[j])
             matrix[i, j] = matrix[j, i]
+    logging.info('Matrix generating finished')
     return matrix
 
 
@@ -45,6 +51,7 @@ def matrix_min(matrix):
 
 
 def reduce_matrix(matrix, row, column):
+    logging.info('Reducing matrix - size {}'.format(len(matrix)))
     for i in range(len(matrix)):
         if matrix[row, i] > matrix[column, i]:
             matrix[i, row] = matrix[i, column]
@@ -86,11 +93,7 @@ def classes(minimums, boundary):
 
 
 def cluster_levels(data, boundary):
-    """
-    Does aglomerative algorithm, I used control prints here, to know how long it takes to generate matrix,
-    how long it takes to reduce matrix and finally to know how many classes is in dataset, but I suppose, that I can
-    find it on github...
-    https://github.com/mareklovci/zsur/blob/6eaba2de4b15933412a6da7b28efc329617b4111/zsur/cluster_levels.py
+    """Does aglomerative algorithm
 
     :param list data: entry data
     :param float boundary: size of a 'jump' from which a new class is recognized (aka 'magic constant')
@@ -100,18 +103,14 @@ def cluster_levels(data, boundary):
     minimums = []
     for i in range(len(matrix) - 1):
         minimums.append(matrix_min(matrix))
-        matrix = reduce_matrix2(matrix, minimums[i][1], minimums[i][2])
+        matrix = reduce_matrix(matrix, minimums[i][1], minimums[i][2])
     return classes(minimums, boundary)
-
-
-def print_clusterlvls(clas):
-    print('\nAglomerativni metodou byly nalezeny: {} tridy'.format(clas))
 
 
 def main():
     data = readfile('../data.txt')
     lvls = cluster_levels(data, 1.9)
-    print_clusterlvls(lvls)
+    logger.info('Aglomerativni metodou byly nalezeny: {} tridy'.format(lvls))
 
 
 if __name__ == '__main__':

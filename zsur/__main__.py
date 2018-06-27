@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 """Main file to test the whole project"""
 
-from zsur import readfile, chain_map, plot_chainmap, cluster_levels, print_clusterlvls
+import logging
+from zsur import readfile, chain_map, plot_chainmap, cluster_levels
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 __all__ = ('main',)  # list of public objects of module
 
@@ -23,7 +26,7 @@ def main():
     plot_chainmap(chmap)
 
     lvls = cluster_levels(data, 1.9)
-    print_clusterlvls(lvls)
+    logger.info('Aglomerativni metodou byly nalezeny: {} tridy'.format(lvls))
 
 
 if __name__ == '__main__':
