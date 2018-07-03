@@ -54,7 +54,7 @@ def get_lines_ross(data: dict):
     logging.info('Generating lines coeficients')
     lines = dict.fromkeys(data)  # vyhrazeni prostoru pro koeficienty primek
     for key in lines:
-        lines[key] = list((0, 0, 1))
+        lines[key] = list((1, 1, 1))
     for key, val in data.items():
         for k, v in data.items():
             if key == k:

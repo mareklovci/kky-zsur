@@ -6,6 +6,7 @@ import logging
 from random import choice
 from zsur import distances_to_centers, distanc, readfile
 import matplotlib.pyplot as plt
+from typing import Dict, List, Tuple
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -71,6 +72,12 @@ def criterion(dist):
     return crits
 
 
+def get_criterial_function_minimum(dist: Dict[Tuple[float], List[Tuple[float]]]):
+    crit = criterion(dist)
+    min_key = min(crit, key=crit.get)
+    return crit[min_key]
+
+
 def update_list_dict(d: dict, key, value):
     """Side effect function!"""
     if d[key] is None:
@@ -79,7 +86,7 @@ def update_list_dict(d: dict, key, value):
         d[key].append(value)
 
 
-def kmeans(data, r):
+def kmeans(data: List[tuple], r):
     distances = dict((c, {}) for c in getcenter(data, r))
     while True:
         distances = distances_to_centers(distances, data)
@@ -99,8 +106,36 @@ def kmeans(data, r):
     return points
 
 
-def iterative_optimization(dist):
+def iterative_optimization(dist: Dict[Tuple[float], List[Tuple[float]]]):
+    for key, val in dist.items():
+        while len(val) > 1:  # cannot destroy one-value set
+            j = get_criterial_function_minimum(dist)
+            point = val.pop()
+            for new_key in _get_unused_key(dist, key):
+                _move_point(dist, point, new_key)
+                new_j = get_criterial_function_minimum(dist)
+                if j <= new_j:
+                    _move_point(dist, point, key)
+                else:
+                    _actualize_keys()
+        k = _get_unused_key(dist, key)
+        print(k)
+
+
+def _actualize_keys():
     pass
+
+
+def _move_point(dist: Dict[Tuple[float], List[Tuple[float]]], point_to_move: tuple, key_where_to_move: tuple):
+    dist[key_where_to_move].append(point_to_move)
+
+
+def _get_unused_key(dist: dict, current_key):
+    for key in dist.keys():
+        if key == current_key:
+            pass
+        else:
+            yield key
 
 
 def plot_kmeans(dist):
@@ -117,6 +152,7 @@ def main():
     crits = criterion(dist)
     logging.info('Values of criterial function: {}'.format(crits))
     plot_kmeans(dist)
+    iterative_optimization(dist)
 
 
 if __name__ == '__main__':
