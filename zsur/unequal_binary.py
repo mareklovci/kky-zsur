@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 def unequal_binary(data: List[tuple]):
     dist = kmeans(data, 2)  # 1st split to two
+    # plot_kmeans(dist)  # inter step
     logging.info('First split')
     crits = criterion(dist)
     max_key = max(crits, key=crits.get)  # take bigger value

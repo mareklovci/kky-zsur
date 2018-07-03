@@ -52,47 +52,75 @@ def merge_dicts(dict1: dict, dict2: dict):
 
 def get_lines_ross(data: dict):
     logging.info('Generating lines coeficients')
-    lines = dict.fromkeys(data)  # vyhrazeni prostoru pro koeficienty primek
-    for key in lines:
-        lines[key] = list((1, 1, 1))
+    lines = _get_default_lines(data)
     for key, val in data.items():
-        for k, v in data.items():
-            if key == k:
-                q = 1
-            else:
-                q = -1
-            for item in v:
-                x = np.array((1, item[0], item[1]))
-                li = lines[key]
-                wec = x.dot(li)
-                if wec * q < 0:
-                    lines[key] = np.transpose(lines[key]) + (x * q)
-    lines = {k: tuple(v) for k, v in lines.items()}
+        itera = 0
+        logging.info('get_lines - key: {}'.format(key))
+        pokracuj = True
+        while pokracuj:
+            logging.info('get_lines - iter: {}'.format( itera))
+            itera += 1
+            pokracuj = False
+            for k, v in data.items():
+                if key == k:
+                    q = 1
+                else:
+                    q = -1
+                for item in v:
+                    x = np.array((1, item[0], item[1]))
+                    li = np.array(lines[key])
+                    if li.dot(x) * q < 0:
+                        lines[key] = np.transpose(lines[key]) + (x * q)
+                        pokracuj = True
+    lines = {k: tuple(v) for k, v in lines.items()}  # from numpy to normal python
     logging.info('Lines coeficients generated - dict(point: coeficients). {}'.format(lines))
     return lines
 
 
-def classify_ross(lines, trypoints):
+def _get_default_lines(data: dict):
+    lines = dict.fromkeys(data)  # vyhrazeni prostoru pro koeficienty primek
+    for key in lines:
+        lines[key] = list((1, 1, 1))
+    return lines
+
+
+def representatives(data: dict, lines: dict):
+    vzory = dict.fromkeys(data)
+    for key in data.keys():
+        tmp = [1, 1, 1]
+        x = data[key][0]
+        no = 0
+        for k in lines.keys():
+            if x[1] > (lines[k][0] + x[0] * lines[k][1]) / -lines[k][2]:
+                tmp[no] = 1
+            else:
+                tmp[no] = 0
+            no += 1
+        vzory[key] = tmp
+    return vzory
+
+
+def classify_ross(lines, trypoints, repre):
     classified = dict.fromkeys(lines)
-    for point in trypoints:
-        sides = dict.fromkeys(lines)
-        for key, val in lines.items():
-            sides[key] = val[0] * point[0] + val[1] * point[1] + val[2]
-        keys = [k for k, v in sides.items() if v < 0]
-        if len(keys) > 1:
-            continue
-        elif len(keys) < 1:
-            continue
-        elif len(keys) == 1:
-            update_list_dict(classified, keys[0], point)
+    for k in trypoints:
+        stavajici = dict.fromkeys(lines)
+        for j in lines.keys():
+            if k[1] > (lines[j][0] + k[0] * lines[j][1])/-lines[j][2]:
+                stavajici[j] = 1
+            else:
+                stavajici[j] = 0
+        for j in repre.keys():
+            if repre[j] == list(stavajici.values()):
+                update_list_dict(classified, j, k)
     return classified
 
 
 def rossenblatt(data, space_size=(-20, 20), step=1):
     lines = get_lines_ross(data)
-    plot_lines(lines)
+    # plot_lines(lines)  # needs some fixing, but algorithm is ok
+    repre = representatives(data, lines)
     trypoints = generate_points(space_size[0], space_size[1], step)
-    classified = classify_ross(lines, trypoints)
+    classified = classify_ross(lines, trypoints, repre)
     data = merge_dicts(data, classified)
     return data
 

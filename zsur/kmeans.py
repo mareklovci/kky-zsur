@@ -108,7 +108,7 @@ def kmeans(data: List[tuple], r):
 
 def iterative_optimization(dist: Dict[Tuple[float], List[Tuple[float]]]):
     for key, val in dist.items():
-        while len(val) > 1:  # cannot destroy one-value set
+        if len(val) > 1:  # cannot destroy one-value set
             j = get_criterial_function_minimum(dist)
             point = val.pop()
             for new_key in _get_unused_key(dist, key):
@@ -117,13 +117,15 @@ def iterative_optimization(dist: Dict[Tuple[float], List[Tuple[float]]]):
                 if j <= new_j:
                     _move_point(dist, point, key)
                 else:
-                    _actualize_keys()
+                    _actualize_keys(dist)
         k = _get_unused_key(dist, key)
-        print(k)
+    return optimalised
 
 
-def _actualize_keys():
-    pass
+def _actualize_keys(data: Dict[tuple, List[tuple]]):
+    dist = dict(data)
+
+    return dist
 
 
 def _move_point(dist: Dict[Tuple[float], List[Tuple[float]]], point_to_move: tuple, key_where_to_move: tuple):
@@ -146,13 +148,25 @@ def plot_kmeans(dist):
     plt.show()
 
 
+def a_criterions(x: tuple, center: tuple, old_len, new_len):
+    """(s(k)/(s(k)-1))*d^2[x, c(k)]"""
+    first = old_len/new_len
+    second = (x[0] - center[0])**2 + (x[1] - center[1])**2
+    a = first * second
+    return a
+
+
 def main():
     data = readfile('../data.txt')
     dist = kmeans(data, 3)
     crits = criterion(dist)
     logging.info('Values of criterial function: {}'.format(crits))
     plot_kmeans(dist)
-    iterative_optimization(dist)
+    new_data = [(0, 0), (3, 0), (0, 4)]
+    new_data_kmeans = kmeans(new_data, 2)
+    print(criterion(new_data_kmeans))
+    optimalised = iterative_optimization(new_data_kmeans)
+    print(optimalised)
 
 
 if __name__ == '__main__':
