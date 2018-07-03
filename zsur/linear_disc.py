@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 def get_lines_constant_increment(data: dict, beta):
     logging.info('Generating lines coeficients')
-    lines = dict.fromkeys(data, [1, 1, 1])  # vyhrazeni prostoru pro koeficienty primek
-    for key, val in data.items():
+    lines = _get_default_lines(data)
+    for key in data.keys():
         cont = True
         while cont:
             cont = False
@@ -31,10 +31,38 @@ def get_lines_constant_increment(data: dict, beta):
                 for item in v:
                     x = np.array((1, item[0], item[1]))
                     if x.dot(lines[key]) * q < 0:
-                        a = item[0]
-                        b = item[1]
-                        ck = beta / sqrt(a ^ 2 + b ^ 2)
+                        if (item[0] and item[1]) != 0:
+                            ck = beta / sqrt(item[0]**2 + item[1]**2)
+                        else:
+                            continue
                         lines[key] = np.transpose(lines[key]) + (ck * x * q)
+                        cont = True
+    lines = {k: tuple(v) for k, v in lines.items()}
+    logging.info('Lines coeficients generated. {}'.format(lines))
+    return lines
+
+
+def get_lines_modified_constant_increment(data: dict, beta):
+    logging.info('Generating lines coeficients')
+    lines = _get_default_lines(data)
+    for key in data.keys():
+        cont = True
+        while cont:
+            cont = False
+            for k, v in data.items():
+                q = 1 if key == k else -1
+                for item in v:
+                    x = np.array((1, item[0], item[1]))
+                    if x.dot(lines[key])*q < 0:
+                        ok = False
+                        while not ok:
+                            if (item[0] and item[1]) != 0:
+                                ck = beta / sqrt(item[0] ** 2 + item[1] ** 2)
+                            else:
+                                continue
+                            lines[key] = np.transpose(lines[key]) + (ck * x * q)
+                            if x.dot(lines[key])*q >= 0:
+                                ok = True
                         cont = True
     lines = {k: tuple(v) for k, v in lines.items()}
     logging.info('Lines coeficients generated. {}'.format(lines))
@@ -56,22 +84,19 @@ def get_lines_ross(data: dict):
     for key, val in data.items():
         itera = 0
         logging.info('get_lines - key: {}'.format(key))
-        pokracuj = True
-        while pokracuj:
+        cont = True
+        while cont:
             logging.info('get_lines - iter: {}'.format( itera))
             itera += 1
-            pokracuj = False
+            cont = False
             for k, v in data.items():
-                if key == k:
-                    q = 1
-                else:
-                    q = -1
+                q = 1 if key == k else -1
                 for item in v:
                     x = np.array((1, item[0], item[1]))
                     li = np.array(lines[key])
                     if li.dot(x) * q < 0:
                         lines[key] = np.transpose(lines[key]) + (x * q)
-                        pokracuj = True
+                        cont = True
     lines = {k: tuple(v) for k, v in lines.items()}  # from numpy to normal python
     logging.info('Lines coeficients generated - dict(point: coeficients). {}'.format(lines))
     return lines
@@ -91,10 +116,7 @@ def representatives(data: dict, lines: dict):
         x = data[key][0]
         no = 0
         for k in lines.keys():
-            if x[1] > (lines[k][0] + x[0] * lines[k][1]) / -lines[k][2]:
-                tmp[no] = 1
-            else:
-                tmp[no] = 0
+            tmp[no] = 1 if x[1] > (lines[k][0] + x[0] * lines[k][1]) / -lines[k][2] else 0
             no += 1
         vzory[key] = tmp
     return vzory
@@ -127,9 +149,18 @@ def rossenblatt(data, space_size=(-20, 20), step=1):
 
 def constant_increment(data, beta, space_size=(-20, 20), step=1):
     lines = get_lines_constant_increment(data, beta)
-    plot_lines(lines)
+    repre = representatives(data, lines)
     trypoints = generate_points(space_size[0], space_size[1], step)
-    classified = classify_ross(lines, trypoints)
+    classified = classify_ross(lines, trypoints, repre)
+    data = merge_dicts(data, classified)
+    return data
+
+
+def modified_constant_increment(data, beta, space_size=(-20, 20), step=1):
+    lines = get_lines_modified_constant_increment(data, beta)
+    repre = representatives(data, lines)
+    trypoints = generate_points(space_size[0], space_size[1], step)
+    classified = classify_ross(lines, trypoints, repre)
     data = merge_dicts(data, classified)
     return data
 
@@ -147,8 +178,10 @@ def main():
     data = kmeans(data, 3)
     ross = rossenblatt(data)
     plot_kmeans(ross)
-    # const_incr = constant_increment(data, 0.5)
-    # plot_kmeans(const_incr)
+    const_incr = constant_increment(data, 0.5)
+    plot_kmeans(const_incr)
+    mod_const_incr = constant_increment(data, 0.5)
+    plot_kmeans(mod_const_incr)
 
 
 if __name__ == '__main__':
