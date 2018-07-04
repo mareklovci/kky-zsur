@@ -107,36 +107,58 @@ def kmeans(data: List[tuple], r):
 
 
 def iterative_optimization(dist: Dict[Tuple[float], List[Tuple[float]]]):
-    for key, val in dist.items():
-        if len(val) > 1:  # cannot destroy one-value set
-            j = get_criterial_function_minimum(dist)
-            point = val.pop()
-            for new_key in _get_unused_key(dist, key):
-                _move_point(dist, point, new_key)
-                new_j = get_criterial_function_minimum(dist)
-                if j <= new_j:
-                    _move_point(dist, point, key)
-                else:
-                    _actualize_keys(dist)
-        k = _get_unused_key(dist, key)
-    return optimalised
-
-
-def _actualize_keys(data: Dict[tuple, List[tuple]]):
-    dist = dict(data)
-
+    dist = dict(dist)
+    changed = True
+    while changed:
+        changed = False
+        for key, val in dist.items():
+            for item in val:
+                if len(val) == 1:
+                    break
+                min_a2 = (-1, (None, None), (None, None))  # (value, new_center, old_center)
+                a1 = a_criterions(item, key, len(val), len(val) - 1)
+                used_keys = [key]
+                for k in _get_unused_key(dist, used_keys):
+                    used_keys.append(k)
+                    a2 = a_criterions(item, k, len(val), len(val) + 1)
+                    if min_a2[0] == -1 or a2 < min_a2[0]:
+                        min_a2 = (a2, k, key)
+                if a1 > min_a2[0] != -1:
+                    changed = True
+                    dist = _move_point(dist, item, min_a2[2], min_a2[1])
+                    dist = _actualize_keys(dist)
+                    break
+            if changed:
+                break
     return dist
 
 
-def _move_point(dist: Dict[Tuple[float], List[Tuple[float]]], point_to_move: tuple, key_where_to_move: tuple):
-    dist[key_where_to_move].append(point_to_move)
+def _actualize_keys(data: Dict[tuple, List[tuple]]):
+    logging.info('Actualizing keys')
+    dist = dict(data)
+    for key, val in dist.items():
+        new_key = [sum(x) for x in zip(*val)]
+        new_key = [i/len(dist[key]) for i in new_key]
+        new_key = tuple(new_key)
+        if new_key not in dist:
+            dist[new_key] = dist[key]
+            del dist[key]
+    return dist
 
 
-def _get_unused_key(dist: dict, current_key):
+def _move_point(dist: Dict[Tuple[float], List[Tuple[float]]], point_to_move: tuple, orig_key, key_where_to_move: tuple):
+    dist = dict(dist)
+    logging.info('Moving {} from key {} to key {}'.format(point_to_move, orig_key, key_where_to_move))
+    logging.info('Current keys in dict {}'.format([key for key in dist.keys()]))
+    index_of_point: int = dist[orig_key].index(point_to_move)
+    point: tuple = dist[orig_key].pop(index_of_point)
+    dist[key_where_to_move].append(point)
+    return dist
+
+
+def _get_unused_key(dist: dict, used_keys):
     for key in dist.keys():
-        if key == current_key:
-            pass
-        else:
+        if key not in used_keys:
             yield key
 
 
@@ -156,17 +178,34 @@ def a_criterions(x: tuple, center: tuple, old_len, new_len):
     return a
 
 
+def _shuffle_dict(dist, no: int = 20):
+    dist = dict(dist)
+    for key, val in dist.items():
+        used_keys = [key]
+        items = [val[i] for i in range(no)]
+        count = 0
+        for k in _get_unused_key(dist, used_keys):
+            used_keys.append(k)
+            for _ in range(10):
+                dist[k].append(items[count])
+                count += 1
+    return dist
+
+
 def main():
     data = readfile('../data.txt')
     dist = kmeans(data, 3)
     crits = criterion(dist)
     logging.info('Values of criterial function: {}'.format(crits))
     plot_kmeans(dist)
-    new_data = [(0, 0), (3, 0), (0, 4)]
-    new_data_kmeans = kmeans(new_data, 2)
-    print(criterion(new_data_kmeans))
-    optimalised = iterative_optimization(new_data_kmeans)
-    print(optimalised)
+    # dist = [(0, 0), (3, 0), (0, 4)]
+    # dist = [(0, 1), (2, 1), (1, 3), (1, -1), (1, 5), (1, 9), (-1, 7), (3, 7)]
+    # dist = kmeans(dist, 3)
+    # print(dist)
+    dist = _shuffle_dict(dist)
+    plot_kmeans(dist)
+    optimalised = iterative_optimization(dist)
+    plot_kmeans(optimalised)
 
 
 if __name__ == '__main__':
