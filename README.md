@@ -39,6 +39,8 @@ Python 3.6.4 | Anaconda (64-bit)
 
 Read requirements.txt!
 
+!Warning! Data from **k-means** algorithm are in Python dictionary like this one: {(center_of_cluster): [(point), (point), ...], ...} 
+
 ## Additional information
 
 Project structure and setup taken from [chriswarrick.com][1].
