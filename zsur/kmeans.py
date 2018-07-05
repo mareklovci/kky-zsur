@@ -178,7 +178,7 @@ def a_criterions(x: tuple, center: tuple, old_len, new_len):
     return a
 
 
-def _shuffle_dict(dist, no: int = 20):
+def shuffle_dict(dist, no: int = 20):
     dist = dict(dist)
     for key, val in dist.items():
         used_keys = [key]
@@ -194,16 +194,15 @@ def _shuffle_dict(dist, no: int = 20):
 
 def main():
     data = readfile('../data.txt')
+    # kmeans
     dist = kmeans(data, 3)
     crits = criterion(dist)
     logging.info('Values of criterial function: {}'.format(crits))
     plot_kmeans(dist)
-    # dist = [(0, 0), (3, 0), (0, 4)]
-    # dist = [(0, 1), (2, 1), (1, 3), (1, -1), (1, 5), (1, 9), (-1, 7), (3, 7)]
-    # dist = kmeans(dist, 3)
-    # print(dist)
-    dist = _shuffle_dict(dist)
+    # shuffle some points
+    dist = shuffle_dict(dist)
     plot_kmeans(dist)
+    # fix shuffle
     optimalised = iterative_optimization(dist)
     plot_kmeans(optimalised)
 

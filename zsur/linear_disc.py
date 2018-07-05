@@ -86,7 +86,7 @@ def get_lines_ross(data: dict):
         logging.info('get_lines - key: {}'.format(key))
         cont = True
         while cont:
-            logging.info('get_lines - iter: {}'.format( itera))
+            logging.info('get_lines - iter: {}'.format(itera))
             itera += 1
             cont = False
             for k, v in data.items():

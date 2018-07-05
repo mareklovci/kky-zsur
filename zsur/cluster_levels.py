@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def distanc(*args):
-    """
-    Calcs squared euclidean distance between two points represented by n dimensional vector
+    """Calcs squared euclidean distance between two points represented by n dimensional vector
 
     :param tuple args: points to calc distance from
     :return: euclidean distance of points in *args
@@ -63,8 +62,7 @@ def reduce_matrix(matrix, row, column):
 
 
 def reduce_matrix2(matrix, row, column):
-    """
-    Function with side effect!
+    """Function with side effect!
 
     :param matrix:
     :param row:

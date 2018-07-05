@@ -3,7 +3,8 @@
 """Main file to test the whole project"""
 
 import logging
-from zsur import readfile, chain_map, plot_chainmap, cluster_levels
+from zsur import readfile
+from matplotlib import pyplot as plt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,14 +20,15 @@ def rf():
     return data
 
 
+def plot_data(data: list):
+    x, y = zip(*data)
+    plt.scatter(x, y, color='black', marker='o')
+    plt.show()
+
+
 def main():
     data = rf()
-    # 1b - just add data, number of iterations to do and boundary to find number of classes from
-    chmap = chain_map(data, 9)
-    plot_chainmap(chmap)
-
-    lvls = cluster_levels(data, 1.9)
-    logger.info('Aglomerativni metodou byly nalezeny: {} tridy'.format(lvls))
+    plot_data(data)  # show data
 
 
 if __name__ == '__main__':
