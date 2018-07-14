@@ -24,7 +24,7 @@ def unequal_binary(data: List[tuple]):
 
 def main():
     # data = [(-3, 0), (3, 2), (-2, 0), (3, 3), (2, 2), (3, -2), (4, -2), (3, -3)]
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     dist = unequal_binary(data)
     plot_kmeans(dist)
 

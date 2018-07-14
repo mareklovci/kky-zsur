@@ -19,7 +19,7 @@ def minimal_distance(data, classes, space_size=(-20, 20), step=1):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     processed_data = minimal_distance(data, 3)
     plot_kmeans(processed_data)
 

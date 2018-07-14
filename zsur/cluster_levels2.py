@@ -139,7 +139,7 @@ def print_clusterlvls(clas):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     # data = [(-3, 1), (1, 1), (-2, 0), (3, -3), (1, 2), (-2, -1)]
     t0 = dt.datetime.now()
     lvls = cluster_levels(data, 1.9)

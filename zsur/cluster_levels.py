@@ -106,7 +106,7 @@ def cluster_levels(data, boundary):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     lvls = cluster_levels(data, 1.9)
     logger.info('Aglomerativni metodou byly nalezeny: {} tridy'.format(lvls))
 

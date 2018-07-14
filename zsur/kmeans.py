@@ -193,7 +193,7 @@ def shuffle_dict(dist, no: int = 20):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     # kmeans
     dist = kmeans(data, 3)
     crits = criterion(dist)

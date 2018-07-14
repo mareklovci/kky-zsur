@@ -78,7 +78,7 @@ def bayes(data, classes, space_size=(-20, 20), step=1):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     baye = bayes(data, 3, step=0.4)
     plot_kmeans(baye)
 

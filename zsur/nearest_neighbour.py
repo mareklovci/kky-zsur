@@ -42,7 +42,7 @@ def knearest_neighbour(data, classes, space_size=(-20, 20), step=1):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     processed_data1 = nearest_neighbour(data, 3)
     processed_data2 = knearest_neighbour(data, 3)
     plot_kmeans(processed_data1)

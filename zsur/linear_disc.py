@@ -174,7 +174,7 @@ def plot_lines(lines: dict):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     data = kmeans(data, 3)
     ross = rossenblatt(data)
     plot_kmeans(ross)

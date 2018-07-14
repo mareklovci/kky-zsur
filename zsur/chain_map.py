@@ -83,7 +83,7 @@ def plot_chainmap(inpt):
 
 
 def main():
-    data = readfile('../data.txt')
+    data = readfile('data.txt')
     chmap = chain_map(data, 9)
     plot_chainmap(chmap)
 
