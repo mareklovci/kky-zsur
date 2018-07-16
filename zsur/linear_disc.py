@@ -22,9 +22,11 @@ logger = logging.getLogger(__name__)
 def get_lines_constant_increment(data: dict, beta):
     logging.info('Generating lines coeficients')
     lines = _get_default_lines(data)
+    training: int = 0
     for key in data.keys():
         cont = True
         while cont:
+            training += 1
             cont = False
             for k, v in data.items():
                 q = 1 if key == k else -1
@@ -39,15 +41,18 @@ def get_lines_constant_increment(data: dict, beta):
                         cont = True
     lines = {k: tuple(v) for k, v in lines.items()}
     logging.info('Lines coeficients generated. {}'.format(lines))
+    logging.info('Training complexity: {}'.format(training))
     return lines
 
 
 def get_lines_modified_constant_increment(data: dict, beta):
     logging.info('Generating lines coeficients')
     lines = _get_default_lines(data)
+    training: int = 0
     for key in data.keys():
         cont = True
         while cont:
+            training += 1
             cont = False
             for k, v in data.items():
                 q = 1 if key == k else -1
@@ -66,6 +71,7 @@ def get_lines_modified_constant_increment(data: dict, beta):
                         cont = True
     lines = {k: tuple(v) for k, v in lines.items()}
     logging.info('Lines coeficients generated. {}'.format(lines))
+    logging.info('Training complexity: {}'.format(training))
     return lines
 
 
@@ -81,11 +87,13 @@ def merge_dicts(dict1: dict, dict2: dict):
 def get_lines_ross(data: dict):
     logging.info('Generating lines coeficients')
     lines = _get_default_lines(data)
-    for key, val in data.items():
+    training: int = 0
+    for key in data.keys():
         itera = 0
         logging.info('get_lines - key: {}'.format(key))
         cont = True
         while cont:
+            training += 1
             logging.info('get_lines - iter: {}'.format(itera))
             itera += 1
             cont = False
@@ -99,6 +107,7 @@ def get_lines_ross(data: dict):
                         cont = True
     lines = {k: tuple(v) for k, v in lines.items()}  # from numpy to normal python
     logging.info('Lines coeficients generated - dict(point: coeficients). {}'.format(lines))
+    logging.info('Training complexity: {}'.format(training))
     return lines
 
 

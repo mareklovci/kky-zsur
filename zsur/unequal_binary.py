@@ -25,8 +25,15 @@ def unequal_binary(data: List[tuple]):
 def main():
     # data = [(-3, 0), (3, 2), (-2, 0), (3, 3), (2, 2), (3, -2), (4, -2), (3, -3)]
     data = readfile('data.txt')
+    logging.info('k-means')
+    means = kmeans(data, 3)
+    j_kmeans = sum(criterion(means).values())
+    plot_kmeans(means)
+    logging.info('Unequal binary')
     dist = unequal_binary(data)
     plot_kmeans(dist)
+    j_binary = sum(criterion(dist).values())
+    logging.info('J kmeans: {}, J binary: {}'.format(j_kmeans, j_binary))
 
 
 if __name__ == '__main__':

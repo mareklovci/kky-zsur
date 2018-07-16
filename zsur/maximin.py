@@ -57,7 +57,7 @@ def main():
     data = readfile('data.txt')
     # data = [(2, -3), (3, 3), (2, 2), (-3, 1), (-1, 0), (-3, -2), (1, -2), (3, 2)]
     no_of_clusters = maximin(data, 0.3)
-    print('With MAXIMIN was found {} clusters'.format(no_of_clusters))
+    print('MAXIMIN found {} clusters'.format(no_of_clusters))
 
 
 if __name__ == '__main__':

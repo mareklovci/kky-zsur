@@ -30,23 +30,32 @@ def plot_data(data: list):
 def main():
     data = rf('data.txt')
     plot_data(data)  # show data
-    # metoda shlukové hladiny
+    # metoda shlukove hladiny
+    logging.info('metoda shlukove hladiny')
     cluster()
     # metoda retezove mapy
+    logging.info('metoda retezove mapy')
     chmap()
     # metoda maximin
+    logging.info('metoda maximin')
     maximin()
     # nerovnomerne binarni deleni
+    logging.info('nerovnomerne binarni deleni')
     unebin()
     # kmeans
+    logging.info('kmeans')
     kmeans()
     # bayesuv klasifikator
+    logging.info('bayesuv klasifikator')
     bayes()
     # klasifikator podle minimalni vzdalenosti
+    logging.info('klasifikator podle minimalni vzdalenosti')
     mindist()
     # klasifikator podle k-nejblizsiho souseda
+    logging.info('klasifikator podle k-nejblizsiho souseda')
     nearneigh()
     # klasifikator s linearnimi diskriminacnimi funkcemi
+    logging.info('klasifikator s linearnimi diskriminacnimi funkcemi')
     lindisc()
 
 

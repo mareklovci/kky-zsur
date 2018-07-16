@@ -13,9 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def getcenter(data, r):
-    """
-    Generator of 'r' random centers, generated from 'data'. Why is this generator? Why not...
-    # TODO: misto 'r' nahodnych stredu vem 'r' od sebe nejvzdalenejsich
+    """Generator of 'r' random centers, generated from 'data'. Why is this generator? Why not...
 
     :param data: data to generate centers from
     :param int r: how many centers to generate
@@ -197,13 +195,15 @@ def main():
     # kmeans
     dist = kmeans(data, 3)
     crits = criterion(dist)
-    logging.info('Values of criterial function: {}'.format(crits))
+    logging.info('Kmeans values of criterial function: {}'.format(crits))
     plot_kmeans(dist)
     # shuffle some points
     dist = shuffle_dict(dist)
     plot_kmeans(dist)
     # fix shuffle
     optimalised = iterative_optimization(dist)
+    crits = criterion(optimalised)
+    logging.info('Optimalized kmeans values of criterial function: {}'.format(crits))
     plot_kmeans(optimalised)
 
 
