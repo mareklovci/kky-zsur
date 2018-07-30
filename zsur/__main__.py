@@ -3,7 +3,7 @@
 """Main file to test the whole project"""
 
 import logging
-from zsur.readfile import rf
+from zsur.readfile import readfile
 from matplotlib import pyplot as plt
 from zsur.bayes import main as bayes
 from zsur.chain_map import main as chmap
@@ -28,7 +28,7 @@ def plot_data(data: list):
 
 
 def main():
-    data = rf('data.txt')
+    data = readfile('data.txt')
     plot_data(data)  # show data
     # metoda shlukove hladiny
     logging.info('metoda shlukove hladiny')
